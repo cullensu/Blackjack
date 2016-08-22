@@ -45,10 +45,12 @@ namespace Blackjack
             {
                 var yourHand = GetNewHand(random);
 
-                writer.WriteLine($"Your cards are {GetCardName(yourHand.Item1)} and {GetCardName(yourHand.Item2)}");
+                writer.WriteLine(
+                    $"Your cards are {yourHand.GetCardName(0)} and {yourHand.GetCardName(1)}");
 
                 var dealerHand = GetNewHand(random);
-                writer.WriteLine($"The dealer is showing a {GetCardName(dealerHand.Item1)}. Do you (h)it or (s)tay?");
+                writer.WriteLine(
+                    $"The dealer is showing a {dealerHand.GetCardName(0)}. Do you (h)it or (s)tay?");
 
                 var inputString = input.NextInput();
                 writer.WriteLine();
@@ -62,32 +64,32 @@ namespace Blackjack
                 if (inputString == "s")
                 {
                     writer.WriteLine(Environment.NewLine +
-                                     $"The dealer flips their other card over. It's a {GetCardName(dealerHand.Item2)}.");
+                                     $"The dealer flips their other card over. It's a {dealerHand.GetCardName(1)}.");
                 }
                 var newCard = 0;
                 if (inputString == "h")
                 {
-                    newCard = DrawCard(random);
+                    newCard = Hand.DrawCard(random);
                     var n = "";
                     if (newCard == 1)
                     {
                         n = "n";
                     }
-                    writer.WriteLine($"The dealer slides another card to you. It's a{n} {GetCardName(newCard)}.");
+                    writer.WriteLine($"The dealer slides another card to you. It's a{n} {Hand.GetNameOf(newCard)}.");
                 }
 
-                var yourCards = GetCardValue(yourHand.Item1) + GetCardValue(yourHand.Item2) + GetCardValue(newCard);
-                var dealersCards = GetCardValue(dealerHand.Item1) + GetCardValue(dealerHand.Item2);
+                var yourCards = yourHand.GetHandScore() + Hand.GetCardValue(newCard);
+                var dealersCards = dealerHand.GetHandScore();
 
                 if (dealersCards < 17)
                 {
-                    newCard = DrawCard(random);
+                    newCard = Hand.DrawCard(random);
                     var n = "";
                     if (newCard == 1)
                     {
                         n = "n";
                     }
-                    writer.WriteLine($"The dealer adds another card to their hand. It's a{n} {GetCardName(newCard)}.");
+                    writer.WriteLine($"The dealer adds another card to their hand. It's a{n} {Hand.GetNameOf(newCard)}.");
                     dealersCards += newCard;
                 }
 
@@ -121,37 +123,9 @@ namespace Blackjack
             input.NextInput();
         }
 
-        private static int DrawCard(Randomer random)
+        private static Hand GetNewHand(Randomer random)
         {
-            var newCard = random.Next(1, 14);
-            return newCard;
-        }
-
-        private static int GetCardValue(int card)
-        {
-            if (card > 10)
-                return 10;
-            return card;
-        }
-
-        private static string GetCardName(int card)
-        {
-            if (card == 1)
-                return "Ace";
-            if (card == 11)
-                return "Jack";
-            if (card == 12)
-                return "Queen";
-            if (card == 13)
-                return "King";
-            return card.ToString();
-        }
-
-        private static Tuple<int, int> GetNewHand(Randomer random)
-        {
-            var num1 = DrawCard(random);
-            var num2 = DrawCard(random);
-            return new Tuple<int, int>(num1, num2);
+            return new Hand(random);
         }
     }
 }
