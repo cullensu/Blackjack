@@ -1,16 +1,15 @@
-using System;
+using System.Collections.Generic;
 
 namespace Blackjack
 {
     public class Hand
     {
-        public Tuple<int, int> _cards;
+        public List<int> _cards = new List<int>();
 
         public Hand(Randomer random)
         {
-            var num1 = DrawCard(random);
-            var num2 = DrawCard(random);
-            _cards = new Tuple<int, int>(num1, num2);
+            _cards.Add(DrawCard(random));
+            _cards.Add(DrawCard(random));
         }
 
         public static int DrawCard(Randomer random)
@@ -21,7 +20,7 @@ namespace Blackjack
 
         public int GetHandScore()
         {
-            return GetCardValue(_cards.Item1) + GetCardValue(_cards.Item2);
+            return GetCardValue(_cards[0]) + GetCardValue(_cards[1]);
         }
 
         public static int GetCardValue(int card)
@@ -33,11 +32,7 @@ namespace Blackjack
 
         public string GetCardName(int i)
         {
-            if (i == 0)
-            {
-                return GetNameOf(_cards.Item1);
-            }
-            return GetNameOf(_cards.Item2);
+            return GetNameOf(_cards[i]);
         }
 
         public static string GetNameOf(int card)
