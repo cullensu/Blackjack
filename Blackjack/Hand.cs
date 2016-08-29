@@ -4,12 +4,18 @@ namespace Blackjack
 {
     public class Hand
     {
+        private readonly Randomer _randomer;
         public List<int> _cards = new List<int>();
 
         public Hand(Randomer random)
         {
-            _cards.Add(DrawCard(random));
-            _cards.Add(DrawCard(random));
+            _randomer = random;
+        }
+
+        public void Deal()
+        {
+            _cards.Add(DrawCard(_randomer));
+            _cards.Add(DrawCard(_randomer));
         }
 
         public static int DrawCard(Randomer random)
@@ -27,6 +33,8 @@ namespace Blackjack
         {
             if (card > 10)
                 return 10;
+            if (card == 1)
+                return 11;
             return card;
         }
 

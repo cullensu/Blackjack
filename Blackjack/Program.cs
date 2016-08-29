@@ -125,7 +125,9 @@ namespace Blackjack
 
         private static Hand GetNewHand(Randomer random)
         {
-            return new Hand(random);
+            var hand = new Hand(random);
+            hand.Deal();
+            return hand;
         }
     }
 }
