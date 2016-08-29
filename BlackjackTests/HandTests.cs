@@ -16,6 +16,14 @@ namespace BlackjackTests
         private Hand _testObj;
         private FakeRandomer _randomizer;
 
+
+        [Test]
+        public void DrawCard_UsesRandomer()
+        {
+            _randomizer.AddValue(3);
+            Assert.That(_testObj.DrawCard(), Is.EqualTo(3));
+        }
+
         [Test]
         public void GetHandScore()
         {

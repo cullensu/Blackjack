@@ -14,13 +14,14 @@ namespace Blackjack
 
         public void Deal()
         {
-            _cards.Add(DrawCard(_randomer));
-            _cards.Add(DrawCard(_randomer));
+            DrawCard();
+            DrawCard();
         }
 
-        public static int DrawCard(Randomer random)
+        public int DrawCard()
         {
-            var newCard = random.Next(1, 14);
+            var newCard = _randomer.Next(1, 14);
+            _cards.Add(newCard);
             return newCard;
         }
 

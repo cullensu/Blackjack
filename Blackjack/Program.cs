@@ -69,7 +69,7 @@ namespace Blackjack
                 var newCard = 0;
                 if (inputString == "h")
                 {
-                    newCard = Hand.DrawCard(random);
+                    newCard = yourHand.DrawCard();
                     var n = "";
                     if (newCard == 1)
                     {
@@ -83,7 +83,7 @@ namespace Blackjack
 
                 if (dealersCards < 17)
                 {
-                    newCard = Hand.DrawCard(random);
+                    newCard = dealerHand.DrawCard();
                     var n = "";
                     if (newCard == 1)
                     {
