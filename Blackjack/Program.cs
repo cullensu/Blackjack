@@ -40,44 +40,18 @@ namespace Blackjack
         {
             var money = 500;
             writer.WriteLine("Welcome to blackjack. You have $500. Each hand costs $25. You win at $1000.");
-
+            var game = new Game();
             while (money > 0)
             {
-                var yourHand = GetNewHand(random);
+                var yourHand = DealYourHand(random, writer);
 
-                writer.WriteLine(
-                    $"Your cards are {yourHand.GetCardName(0)} and {yourHand.GetCardName(1)}");
+                var dealerHand = DealDealerHand(random, writer);
 
-                var dealerHand = GetNewHand(random);
-                writer.WriteLine(
-                    $"The dealer is showing {dealerHand.GetCardName(0)}. Do you (h)it or (s)tay?");
+                game.HandlePlayerDraw(writer, input, yourHand);
+                writer.WriteLine(Environment.NewLine +
+                                 $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
 
-                var inputString = input.NextInput();
-                writer.WriteLine();
-                while (inputString != "h" && inputString != "s")
-                {
-                    writer.WriteLine("Do you (h)it or (s)tay?");
-                    inputString = input.NextInput();
-                    writer.WriteLine();
-                }
-
-                if (inputString == "s")
-                {
-                    writer.WriteLine(Environment.NewLine +
-                                     $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
-                }
-                var newCard = 0;
-                if (inputString == "h")
-                {
-                    newCard = yourHand.Draw();
-                    writer.WriteLine($"The dealer slides another card to you. It's {Card.GetNameOf(newCard)}.");
-                }
-
-                if (dealerHand.GetHandScore() < 17)
-                {
-                    newCard = dealerHand.Draw();
-                    writer.WriteLine($"The dealer adds another card to their hand. It's {Card.GetNameOf(newCard)}.");
-                }
+                HandleDealerDraw(writer, dealerHand);
 
                 money = DecideAndOutputWinner(writer, yourHand, dealerHand, money);
 
@@ -93,14 +67,39 @@ namespace Blackjack
             input.NextInput();
         }
 
+        private static Hand DealDealerHand(Randomer random, Writer writer)
+        {
+            var dealerHand = GetNewHand(random);
+            writer.WriteLine(
+                $"The dealer is showing {dealerHand.GetCardName(0)}.");
+            return dealerHand;
+        }
+
+        private static Hand DealYourHand(Randomer random, Writer writer)
+        {
+            var yourHand = GetNewHand(random);
+            writer.WriteLine(
+                $"Your cards are {yourHand.GetCardName(0)} and {yourHand.GetCardName(1)}");
+            return yourHand;
+        }
+
+        private static void HandleDealerDraw(Writer writer, Hand dealerHand)
+        {
+            if (dealerHand.GetHandScore() < 17)
+            {
+                var newCard = dealerHand.Draw();
+                writer.WriteLine($"The dealer adds another card to their hand. It's {Card.GetNameOf(newCard)}.");
+            }
+        }
+
         private static int DecideAndOutputWinner(Writer writer, Hand yourHand, Hand dealerHand, int money)
         {
             var yourScore = yourHand.GetHandScore();
             var dealScore = dealerHand.GetHandScore();
-            if (yourScore < dealScore || yourScore > 21)
+            if (yourScore < dealScore || yourHand.Busted())
             {
                 money -= 25;
-                var loseMessage = yourScore > 21 ? "You busted!" : "You lost!";
+                var loseMessage = yourHand.Busted() ? "You busted!" : "You lost!";
                 writer.WriteLine(
                     $"You had {yourScore} and dealer had {dealScore}. {loseMessage} You now have ${money} (-$25)");
             }

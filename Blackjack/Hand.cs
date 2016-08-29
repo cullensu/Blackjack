@@ -58,5 +58,10 @@ namespace Blackjack
         {
             return Card.GetNameOf(_cards[i]);
         }
+
+        public bool Busted()
+        {
+            return GetHandScore() > WinningThreshold;
+        }
     }
 }

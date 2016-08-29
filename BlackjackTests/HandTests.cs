@@ -16,6 +16,16 @@ namespace BlackjackTests
         private Hand _testObj;
         private FakeRandomer _randomizer;
 
+        [Test]
+        public void Busted_ReturnsTrueIfTotalMoreThanThreshold()
+        {
+            _randomizer.AddValue(9);
+            _testObj.Deal();
+            Assert.That(_testObj.Busted(), Is.False);
+            _testObj.Draw();
+            Assert.That(_testObj.Busted(), Is.True);
+        }
+
 
         [Test]
         public void DrawCard_UsesRandomer()

@@ -16,7 +16,9 @@ namespace BlackjackTests
 
             var fakeRandomer = new FakeRandomer();
             fakeRandomer.AddValue(2);
-            program.Game(fakeRandomer, fakeWriter, new FakeInput());
+            var fakeInput = new FakeInput();
+            fakeInput.AddValue("s");
+            program.Game(fakeRandomer, fakeWriter, fakeInput);
             Assert.That(fakeWriter.output[0],
                 Is.EqualTo("Welcome to blackjack. You have $500. Each hand costs $25. You win at $1000."));
             Assert.That(fakeWriter.output.Last(), Is.EqualTo("You lose."));
@@ -35,9 +37,17 @@ namespace BlackjackTests
 
     internal class FakeInput : Input
     {
+        public int index;
+        public List<string> values = new List<string>();
+
         public override string NextInput()
         {
-            return "s";
+            return values[index++%values.Count];
+        }
+
+        public void AddValue(string value)
+        {
+            values.Add(value);
         }
     }
 
