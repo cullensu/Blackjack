@@ -89,25 +89,7 @@ namespace Blackjack
                     writer.WriteLine($"The dealer adds another card to their hand. It's a{n} {Hand.GetNameOf(newCard)}.");
                 }
 
-                if (yourHand.GetHandScore() < dealerHand.GetHandScore() || yourHand.GetHandScore() > 21)
-                {
-                    money -= 25;
-                    var loseMessage = yourHand.GetHandScore() > 21 ? "You busted!" : "You lost!";
-                    writer.WriteLine(
-                        $"You had {yourHand.GetHandScore()} and dealer had {dealerHand.GetHandScore()}. {loseMessage} You now have ${money} (-$25)");
-                }
-                else if (yourHand.GetHandScore() == dealerHand.GetHandScore())
-                {
-                    writer.WriteLine(
-                        $"You had {yourHand.GetHandScore()} and dealer had {dealerHand.GetHandScore()}. It's a push! You now have ${money} (+$0))");
-                }
-                else
-                {
-                    money += 25;
-                    writer.WriteLine(
-                        $"You had {yourHand.GetHandScore()} and dealer had {dealerHand.GetHandScore()}. You won! You now have ${money} (+$25).");
-                }
-                writer.WriteLine();
+                money = DecideAndOutputWinner(writer, yourHand, dealerHand, money);
 
                 if (money >= 1000)
                 {
@@ -119,6 +101,32 @@ namespace Blackjack
 
             writer.WriteLine("You lose.");
             input.NextInput();
+        }
+
+        private static int DecideAndOutputWinner(Writer writer, Hand yourHand, Hand dealerHand, int money)
+        {
+            var yourScore = yourHand.GetHandScore();
+            var dealScore = dealerHand.GetHandScore();
+            if (yourScore < dealScore || yourScore > 21)
+            {
+                money -= 25;
+                var loseMessage = yourScore > 21 ? "You busted!" : "You lost!";
+                writer.WriteLine(
+                    $"You had {yourScore} and dealer had {dealScore}. {loseMessage} You now have ${money} (-$25)");
+            }
+            else if (yourScore == dealScore)
+            {
+                writer.WriteLine(
+                    $"You had {yourScore} and dealer had {dealScore}. It's a push! You now have ${money} (+$0))");
+            }
+            else
+            {
+                money += 25;
+                writer.WriteLine(
+                    $"You had {yourScore} and dealer had {dealScore}. You won! You now have ${money} (+$25).");
+            }
+            writer.WriteLine();
+            return money;
         }
 
         private static Hand GetNewHand(Randomer random)
