@@ -50,7 +50,7 @@ namespace Blackjack
 
                 var dealerHand = GetNewHand(random);
                 writer.WriteLine(
-                    $"The dealer is showing a {dealerHand.GetCardName(0)}. Do you (h)it or (s)tay?");
+                    $"The dealer is showing {dealerHand.GetCardName(0)}. Do you (h)it or (s)tay?");
 
                 var inputString = input.NextInput();
                 writer.WriteLine();
@@ -64,29 +64,19 @@ namespace Blackjack
                 if (inputString == "s")
                 {
                     writer.WriteLine(Environment.NewLine +
-                                     $"The dealer flips their other card over. It's a {dealerHand.GetCardName(1)}.");
+                                     $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
                 }
                 var newCard = 0;
                 if (inputString == "h")
                 {
                     newCard = yourHand.Draw();
-                    var n = "";
-                    if (newCard == 1)
-                    {
-                        n = "n";
-                    }
-                    writer.WriteLine($"The dealer slides another card to you. It's a{n} {Hand.GetNameOf(newCard)}.");
+                    writer.WriteLine($"The dealer slides another card to you. It's {Card.GetNameOf(newCard)}.");
                 }
 
                 if (dealerHand.GetHandScore() < 17)
                 {
                     newCard = dealerHand.Draw();
-                    var n = "";
-                    if (newCard == 1)
-                    {
-                        n = "n";
-                    }
-                    writer.WriteLine($"The dealer adds another card to their hand. It's a{n} {Hand.GetNameOf(newCard)}.");
+                    writer.WriteLine($"The dealer adds another card to their hand. It's {Card.GetNameOf(newCard)}.");
                 }
 
                 money = DecideAndOutputWinner(writer, yourHand, dealerHand, money);

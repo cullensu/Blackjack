@@ -4,9 +4,6 @@ namespace Blackjack
 {
     public class Hand
     {
-        private const int FaceCardValue = 10;
-        private const int HighAceValue = 11;
-        private const int LowAceValue = 1;
         private const int WinningThreshold = 21;
         private readonly Randomer _randomer;
         public List<int> _cards = new List<int>();
@@ -35,14 +32,14 @@ namespace Blackjack
             var aces = 0;
             foreach (var card in _cards)
             {
-                if (IsAce(card))
+                if (Card.IsAce(card))
                     aces++;
                 total += GetCardValue(card);
             }
 
             while (total > WinningThreshold && aces > 0)
             {
-                total -= HighAceValue - LowAceValue;
+                total -= Card.HighAceValue - Card.LowAceValue;
                 aces--;
             }
             return total;
@@ -50,39 +47,16 @@ namespace Blackjack
 
         private int GetCardValue(int card)
         {
-            if (IsFace(card))
-                return FaceCardValue;
-            if (IsAce(card))
-                return HighAceValue;
+            if (Card.IsFace(card))
+                return Card.FaceCardValue;
+            if (Card.IsAce(card))
+                return Card.HighAceValue;
             return card;
-        }
-
-        private static bool IsFace(int card)
-        {
-            return card > FaceCardValue;
-        }
-
-        private static bool IsAce(int card)
-        {
-            return card == LowAceValue;
         }
 
         public string GetCardName(int i)
         {
-            return GetNameOf(_cards[i]);
-        }
-
-        public static string GetNameOf(int card)
-        {
-            if (IsAce(card))
-                return "Ace";
-            if (card == 11)
-                return "Jack";
-            if (card == 12)
-                return "Queen";
-            if (card == 13)
-                return "King";
-            return card.ToString();
+            return Card.GetNameOf(_cards[i]);
         }
     }
 }
