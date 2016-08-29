@@ -49,5 +49,16 @@ namespace BlackjackTests
             _randomizer.AddValue(9);
             _testObj = new Hand(_randomizer);
         }
+
+        [Test]
+        public void GetHandScore_HandlesNCards()
+        {
+            _randomizer.AddValue(2);
+            _testObj.Deal();
+            _randomizer.AddValue(5);
+            _testObj.DrawCard();
+            _testObj.DrawCard();
+            Assert.That(_testObj.GetHandScore(), Is.EqualTo(2 + 2 + 5 + 2));
+        }
     }
 }

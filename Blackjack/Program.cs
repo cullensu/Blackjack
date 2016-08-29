@@ -78,10 +78,7 @@ namespace Blackjack
                     writer.WriteLine($"The dealer slides another card to you. It's a{n} {Hand.GetNameOf(newCard)}.");
                 }
 
-                var yourCards = yourHand.GetHandScore() + Hand.GetCardValue(newCard);
-                var dealersCards = dealerHand.GetHandScore();
-
-                if (dealersCards < 17)
+                if (dealerHand.GetHandScore() < 17)
                 {
                     newCard = dealerHand.DrawCard();
                     var n = "";
@@ -90,27 +87,28 @@ namespace Blackjack
                         n = "n";
                     }
                     writer.WriteLine($"The dealer adds another card to their hand. It's a{n} {Hand.GetNameOf(newCard)}.");
-                    dealersCards += newCard;
                 }
 
-                if (yourCards < dealersCards || yourCards > 21)
+                if (yourHand.GetHandScore() < dealerHand.GetHandScore() || yourHand.GetHandScore() > 21)
                 {
                     money -= 25;
-                    var loseMessage = yourCards > 21 ? "You busted!" : "You lost!";
+                    var loseMessage = yourHand.GetHandScore() > 21 ? "You busted!" : "You lost!";
                     writer.WriteLine(
-                        $"You had {yourCards} and dealer had {dealersCards}. {loseMessage} You now have ${money} (-$25)");
+                        $"You had {yourHand.GetHandScore()} and dealer had {dealerHand.GetHandScore()}. {loseMessage} You now have ${money} (-$25)");
                 }
-                else if (yourCards == dealersCards)
+                else if (yourHand.GetHandScore() == dealerHand.GetHandScore())
                 {
                     writer.WriteLine(
-                        $"You had {yourCards} and dealer had {dealersCards}. It's a push! You now have ${money} (+$0))");
+                        $"You had {yourHand.GetHandScore()} and dealer had {dealerHand.GetHandScore()}. It's a push! You now have ${money} (+$0))");
                 }
                 else
                 {
                     money += 25;
                     writer.WriteLine(
-                        $"You had {yourCards} and dealer had {dealersCards}. You won! You now have ${money} (+$25).");
+                        $"You had {yourHand.GetHandScore()} and dealer had {dealerHand.GetHandScore()}. You won! You now have ${money} (+$25).");
                 }
+                writer.WriteLine();
+
                 if (money >= 1000)
                 {
                     writer.WriteLine("You win!");

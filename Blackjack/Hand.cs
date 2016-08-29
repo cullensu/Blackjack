@@ -27,7 +27,12 @@ namespace Blackjack
 
         public int GetHandScore()
         {
-            return GetCardValue(_cards[0]) + GetCardValue(_cards[1]);
+            var total = 0;
+            foreach (var card in _cards)
+            {
+                total += GetCardValue(card);
+            }
+            return total;
         }
 
         public static int GetCardValue(int card)
