@@ -4,6 +4,10 @@ namespace Blackjack
 {
     public class Hand
     {
+        private const int FaceCardValue = 10;
+        private const int HighAceValue = 11;
+        private const int LowAceValue = 1;
+        private const int WinningThreshold = 21;
         private readonly Randomer _randomer;
         public List<int> _cards = new List<int>();
 
@@ -14,11 +18,11 @@ namespace Blackjack
 
         public void Deal()
         {
-            DrawCard();
-            DrawCard();
+            Draw();
+            Draw();
         }
 
-        public int DrawCard()
+        public int Draw()
         {
             var newCard = _randomer.Next(1, 14);
             _cards.Add(newCard);
@@ -28,20 +32,39 @@ namespace Blackjack
         public int GetHandScore()
         {
             var total = 0;
+            var aces = 0;
             foreach (var card in _cards)
             {
+                if (IsAce(card))
+                    aces++;
                 total += GetCardValue(card);
+            }
+
+            while (total > WinningThreshold && aces > 0)
+            {
+                total -= HighAceValue - LowAceValue;
+                aces--;
             }
             return total;
         }
 
-        public static int GetCardValue(int card)
+        private int GetCardValue(int card)
         {
-            if (card > 10)
-                return 10;
-            if (card == 1)
-                return 11;
+            if (IsFace(card))
+                return FaceCardValue;
+            if (IsAce(card))
+                return HighAceValue;
             return card;
+        }
+
+        private static bool IsFace(int card)
+        {
+            return card > FaceCardValue;
+        }
+
+        private static bool IsAce(int card)
+        {
+            return card == LowAceValue;
         }
 
         public string GetCardName(int i)
@@ -51,7 +74,7 @@ namespace Blackjack
 
         public static string GetNameOf(int card)
         {
-            if (card == 1)
+            if (IsAce(card))
                 return "Ace";
             if (card == 11)
                 return "Jack";

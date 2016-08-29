@@ -21,7 +21,7 @@ namespace BlackjackTests
         public void DrawCard_UsesRandomer()
         {
             _randomizer.AddValue(3);
-            Assert.That(_testObj.DrawCard(), Is.EqualTo(3));
+            Assert.That(_testObj.Draw(), Is.EqualTo(3));
         }
 
         [Test]
@@ -41,13 +41,23 @@ namespace BlackjackTests
             Assert.That(_testObj.GetHandScore(), Is.EqualTo(13));
         }
 
-        [Test, Ignore("")]
+        [Test]
         public void GetHandScore_HandlesAcesAsOne()
         {
-            _randomizer = new FakeRandomer();
             _randomizer.AddValue(9);
             _randomizer.AddValue(9);
-            _testObj = new Hand(_randomizer);
+            _randomizer.AddValue(1);
+            _testObj.Deal();
+            _testObj.Draw();
+            Assert.That(_testObj.GetHandScore(), Is.EqualTo(19));
+        }
+
+        [Test]
+        public void GetHandScore_HandlesAcesAsOneOrElevenInSameHand()
+        {
+            _randomizer.AddValue(1);
+            _testObj.Deal();
+            Assert.That(_testObj.GetHandScore(), Is.EqualTo(12));
         }
 
         [Test]
@@ -56,8 +66,8 @@ namespace BlackjackTests
             _randomizer.AddValue(2);
             _testObj.Deal();
             _randomizer.AddValue(5);
-            _testObj.DrawCard();
-            _testObj.DrawCard();
+            _testObj.Draw();
+            _testObj.Draw();
             Assert.That(_testObj.GetHandScore(), Is.EqualTo(2 + 2 + 5 + 2));
         }
     }
