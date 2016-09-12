@@ -13,7 +13,7 @@
                 while ((inputString != "h") && (inputString != "s"))
                 {
                     writer.WriteLine("Do you (h)it or (s)tay?");
-                    inputString = input.NextInput();
+                    inputString = input.NextKey();
                     writer.WriteLine();
                 }
 

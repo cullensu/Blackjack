@@ -12,9 +12,14 @@ namespace Blackjack
 
     public class Input
     {
-        public virtual string NextInput()
+        public virtual string NextKey()
         {
             return Console.ReadKey().KeyChar.ToString();
+        }
+
+        public virtual string NextInput()
+        {
+            return Console.ReadLine();
         }
     }
 
@@ -43,7 +48,7 @@ namespace Blackjack
             var game = new Game();
             while (money > 0)
             {
-                var wager = new Wager(writer).GetWager();
+                var wager = new Wager(writer, input).GetWager();
 
                 var yourHand = DealYourHand(random, writer);
 
@@ -60,13 +65,13 @@ namespace Blackjack
                 if (money >= 1000)
                 {
                     writer.WriteLine("You win!");
-                    input.NextInput();
+                    input.NextKey();
                     return;
                 }
             }
 
             writer.WriteLine("You lose.");
-            input.NextInput();
+            input.NextKey();
         }
 
         private static Hand DealDealerHand(Randomer random, Writer writer)
@@ -103,7 +108,7 @@ namespace Blackjack
                 money -= wager;
                 var loseMessage = yourHand.Busted() ? "You busted!" : "You lost!";
                 writer.WriteLine(
-                    $"You had {yourScore} and dealer had {dealScore}. {loseMessage} You now have ${money} (-$25)");
+                    $"You had {yourScore} and dealer had {dealScore}. {loseMessage} You now have ${money} (-${wager})");
             }
             else if (yourScore == dealScore)
             {
@@ -114,7 +119,7 @@ namespace Blackjack
             {
                 money += wager;
                 writer.WriteLine(
-                    $"You had {yourScore} and dealer had {dealScore}. You won! You now have ${money} (+$25).");
+                    $"You had {yourScore} and dealer had {dealScore}. You won! You now have ${money} (+${wager}).");
             }
             writer.WriteLine();
             return money;

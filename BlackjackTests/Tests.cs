@@ -40,9 +40,14 @@ namespace BlackjackTests
         public int index;
         public List<string> values = new List<string>();
 
-        public override string NextInput()
+        public override string NextKey()
         {
             return values[index++%values.Count];
+        }
+
+        public override string NextInput()
+        {
+            return NextKey();
         }
 
         public void AddValue(string value)
