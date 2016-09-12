@@ -43,8 +43,7 @@ namespace Blackjack
             var game = new Game();
             while (money > 0)
             {
-                var wager = 25;
-                writer.WriteLine($"This hand costs you ${wager}.");
+                var wager = new Wager(writer).GetWager();
 
                 var yourHand = DealYourHand(random, writer);
 

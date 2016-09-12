@@ -20,7 +20,7 @@ namespace BlackjackTests
             fakeInput.AddValue("s");
             program.Game(fakeRandomer, fakeWriter, fakeInput);
             Assert.That(fakeWriter.output[0],
-                Is.EqualTo("Welcome to blackjack. You have $500. Each hand costs $25. You win at $1000."));
+                Is.EqualTo("Welcome to blackjack. You have $500. You win at $1000."));
             Assert.That(fakeWriter.output.Last(), Is.EqualTo("You lose."));
         }
     }

@@ -6,57 +6,55 @@ namespace BlackjackTests
     [TestFixture]
     public class GameTests
     {
+        [SetUp]
+        public void Setup()
+        {
+            _fakeWriter = new FakeWriter();
+            _randomer = new FakeRandomer();
+            _yourHand = new Hand(_randomer);
+            _fakeInput = new FakeInput();
+        }
+
+        private FakeRandomer _randomer;
+        private Hand _yourHand;
+        private FakeInput _fakeInput;
+        private FakeWriter _fakeWriter;
+
         [Test]
         public void HittingMakesHandBigger()
         {
-            var randomer = new FakeRandomer();
-            randomer.AddValue(2);
-            var hand = new Hand(randomer);
+            _randomer.AddValue(2);
 
-            var fakeInput = new FakeInput();
-            fakeInput.AddValue("h");
-            fakeInput.AddValue("s");
-            new Game().HandlePlayerDraw(new FakeWriter(), fakeInput, hand);
+            _fakeInput.AddValue("h");
+            _fakeInput.AddValue("s");
+            new Game().HandlePlayerDraw(_fakeWriter, _fakeInput, _yourHand);
 
-            Assert.That(hand.GetHandScore(), Is.EqualTo(2));
+            Assert.That(_yourHand.GetHandScore(), Is.EqualTo(2));
         }
 
         [Test]
         public void HittingTwiceMakesHandEvenBigger()
         {
-            var randomer = new FakeRandomer();
-            randomer.AddValue(2);
-            var hand = new Hand(randomer);
+            _randomer.AddValue(2);
+            _fakeInput.AddValue("h");
+            _fakeInput.AddValue("h");
+            _fakeInput.AddValue("s");
+            new Game().HandlePlayerDraw(_fakeWriter, _fakeInput, _yourHand);
 
-            var fakeInput = new FakeInput();
-            fakeInput.AddValue("h");
-            fakeInput.AddValue("h");
-            fakeInput.AddValue("s");
-            new Game().HandlePlayerDraw(new FakeWriter(), fakeInput, hand);
-
-            Assert.That(hand.GetHandScore(), Is.EqualTo(4));
+            Assert.That(_yourHand.GetHandScore(), Is.EqualTo(4));
         }
 
         [Test]
         public void PlayerBustBreaksLoop()
         {
-            var randomer = new FakeRandomer();
-            randomer.AddValue(10);
-            var hand = new Hand(randomer);
+            _randomer.AddValue(10);
+            _fakeInput.AddValue("h");
+            _fakeInput.AddValue("h");
+            _fakeInput.AddValue("h");
 
-            var fakeInput = new FakeInput();
-            fakeInput.AddValue("h");
-            fakeInput.AddValue("h");
-            fakeInput.AddValue("h");
+            new Game().HandlePlayerDraw(_fakeWriter, _fakeInput, _yourHand);
 
-            new Game().HandlePlayerDraw(new FakeWriter(), fakeInput, hand);
-
-            Assert.That(hand.GetHandScore(), Is.EqualTo(30));
+            Assert.That(_yourHand.GetHandScore(), Is.EqualTo(30));
         }
-
-        //hit 3 times
-        //add 10 each time
-
-        //should break out of loop
     }
 }
