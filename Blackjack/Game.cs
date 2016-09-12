@@ -6,18 +6,23 @@
             Hand yourHand)
         {
             var inputString = "";
-            while (inputString != "h" && inputString != "s")
-            {
-                writer.WriteLine("Do you (h)it or (s)tay?");
-                inputString = input.NextInput();
-                writer.WriteLine();
-            }
 
-            if (inputString == "h")
+            do
             {
-                var newCard = yourHand.Draw();
-                writer.WriteLine($"The dealer slides another card to you. It's {Card.GetNameOf(newCard)}.");
-            }
+                inputString = "";
+                while ((inputString != "h") && (inputString != "s"))
+                {
+                    writer.WriteLine("Do you (h)it or (s)tay?");
+                    inputString = input.NextInput();
+                    writer.WriteLine();
+                }
+
+                if (inputString == "h")
+                {
+                    var newCard = yourHand.Draw();
+                    writer.WriteLine($"The dealer slides another card to you. It's {Card.GetNameOf(newCard)}.");
+                }
+            } while (inputString != "s");
         }
     }
 }
