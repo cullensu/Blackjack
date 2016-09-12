@@ -22,25 +22,31 @@ namespace BlackjackTests
         public void GettingWagerFromUser()
         {
             _fakeInput.AddValue("10");
-
-            Assert.That(_testObj.GetWager(), Is.EqualTo(10));
+            _testObj.GetWager();
+            Assert.That(_testObj.LoseAmount(), Is.EqualTo(10));
+            Assert.That(_testObj.WinAmount(), Is.EqualTo(15));
         }
 
         [Test]
         public void WagerDefaultsTo25()
         {
             _fakeInput.AddValue("");
+            _testObj.GetWager();
 
-            Assert.That(_testObj.GetWager(), Is.EqualTo(25));
+            Assert.That(_testObj.LoseAmount(), Is.EqualTo(25));
         }
 
         [Test]
         public void WagerMinAndMaxAreRespected()
         {
             _fakeInput.AddValue("4");
-            Assert.That(_testObj.GetWager(), Is.EqualTo(10));
+            _testObj.GetWager();
+
+            Assert.That(_testObj.LoseAmount(), Is.EqualTo(10));
             _fakeInput.AddValue("16567801");
-            Assert.That(_testObj.GetWager(), Is.EqualTo(100));
+            _testObj.GetWager();
+
+            Assert.That(_testObj.LoseAmount(), Is.EqualTo(100));
         }
     }
 }

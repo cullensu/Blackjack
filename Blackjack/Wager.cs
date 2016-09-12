@@ -6,9 +6,11 @@ namespace Blackjack
     {
         private const int MinBet = 10;
 
-        public const int MaxBet = 100;
+        private const int MaxBet = 100;
+        private const float WinRatio = 1.5f;
         private readonly Input _input;
         private readonly Writer _writer;
+        private int _wager;
 
         public Wager(Writer writer, Input input)
         {
@@ -16,19 +18,28 @@ namespace Blackjack
             _input = input;
         }
 
-        public int GetWager()
+        public void GetWager()
         {
             _writer.WriteLine($"Bet an amount between ${MinBet} and ${MaxBet}.");
 
-            var wager = 25;
+            _wager = 25;
             int dummy;
             if (int.TryParse(_input.NextInput(), out dummy))
-                wager = dummy;
-            wager = Math.Max(MinBet, wager);
-            wager = Math.Min(MaxBet, wager);
+                _wager = dummy;
+            _wager = Math.Max(MinBet, _wager);
+            _wager = Math.Min(MaxBet, _wager);
 
-            _writer.WriteLine($"This hand costs you ${wager}.");
-            return wager;
+            _writer.WriteLine($"This hand costs you ${_wager}.");
+        }
+
+        public int LoseAmount()
+        {
+            return _wager;
+        }
+
+        public int WinAmount()
+        {
+            return (int) (_wager*WinRatio);
         }
     }
 }
