@@ -39,10 +39,13 @@ namespace Blackjack
         public void Game(Randomer random, Writer writer, Input input)
         {
             var money = 500;
-            writer.WriteLine("Welcome to blackjack. You have $500. Each hand costs $25. You win at $1000.");
+            writer.WriteLine("Welcome to blackjack. You have $500. You win at $1000.");
             var game = new Game();
             while (money > 0)
             {
+                var wager = 25;
+                writer.WriteLine($"This hand costs you ${wager}.");
+
                 var yourHand = DealYourHand(random, writer);
 
                 var dealerHand = DealDealerHand(random, writer);
@@ -53,7 +56,7 @@ namespace Blackjack
 
                 HandleDealerDraw(writer, dealerHand);
 
-                money = DecideAndOutputWinner(writer, yourHand, dealerHand, money);
+                money = DecideAndOutputWinner(writer, yourHand, dealerHand, money, wager);
 
                 if (money >= 1000)
                 {
@@ -92,13 +95,13 @@ namespace Blackjack
             }
         }
 
-        private static int DecideAndOutputWinner(Writer writer, Hand yourHand, Hand dealerHand, int money)
+        private static int DecideAndOutputWinner(Writer writer, Hand yourHand, Hand dealerHand, int money, int wager)
         {
             var yourScore = yourHand.GetHandScore();
             var dealScore = dealerHand.GetHandScore();
-            if (yourScore < dealScore || yourHand.Busted())
+            if ((yourScore < dealScore) || yourHand.Busted())
             {
-                money -= 25;
+                money -= wager;
                 var loseMessage = yourHand.Busted() ? "You busted!" : "You lost!";
                 writer.WriteLine(
                     $"You had {yourScore} and dealer had {dealScore}. {loseMessage} You now have ${money} (-$25)");
@@ -110,7 +113,7 @@ namespace Blackjack
             }
             else
             {
-                money += 25;
+                money += wager;
                 writer.WriteLine(
                     $"You had {yourScore} and dealer had {dealScore}. You won! You now have ${money} (+$25).");
             }
