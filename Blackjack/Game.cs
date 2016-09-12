@@ -22,7 +22,7 @@
                     var newCard = yourHand.Draw();
                     writer.WriteLine($"The dealer slides another card to you. It's {Card.GetNameOf(newCard)}.");
                 }
-            } while (inputString != "s");
+            } while ((inputString != "s") && !yourHand.Busted());
         }
     }
 }
