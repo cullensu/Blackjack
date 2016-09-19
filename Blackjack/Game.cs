@@ -4,9 +4,9 @@ namespace Blackjack
 {
     public class Game
     {
-        private readonly Writer _writer;
         private readonly Input _input;
         private readonly Randomer _random;
+        private readonly Writer _writer;
 
         public Game(Writer writer, Input input, Randomer random)
         {
@@ -41,9 +41,9 @@ namespace Blackjack
         public void PlayHand(Wager wager, Bank bank)
         {
             wager.GetWager();
-
-            var yourHand = DealYourHand();
-            var dealerHand = DealDealerHand();
+            var deck = new Deck(_random, _writer);
+            var yourHand = deck.DealPlayerHand();
+            var dealerHand = deck.DealDealerHand();
 
             HandlePlayerDraw(yourHand);
             HandleDealerDraw(dealerHand);
@@ -52,26 +52,10 @@ namespace Blackjack
             bank.Settle(diffMoney);
         }
 
-        private Hand DealDealerHand()
-        {
-            var dealerHand = GetNewHand();
-            _writer.WriteLine(
-                $"The dealer is showing {dealerHand.GetCardName(0)}.");
-            return dealerHand;
-        }
-
-        private Hand DealYourHand()
-        {
-            var yourHand = GetNewHand();
-            _writer.WriteLine(
-                $"Your cards are {yourHand.GetCardName(0)} and {yourHand.GetCardName(1)}");
-            return yourHand;
-        }
-
         private void HandleDealerDraw(Hand dealerHand)
         {
             _writer.WriteLine(Environment.NewLine +
-                             $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
+                              $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
             if (dealerHand.GetHandScore() < 17)
             {
                 var newCard = dealerHand.Draw();
@@ -105,13 +89,6 @@ namespace Blackjack
                     $"You had {yourScore} and dealer had {dealScore}. You won!");
             }
             return diffMoney;
-        }
-
-        private Hand GetNewHand()
-        {
-            var hand = new Hand(_random);
-            hand.Deal();
-            return hand;
         }
     }
 }

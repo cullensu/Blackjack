@@ -47,19 +47,6 @@ namespace BlackjackTests
         }
 
         [Test]
-        public void PlayerBustBreaksLoop()
-        {
-            _randomer.AddValue(10);
-            _fakeInput.AddValue("h");
-            _fakeInput.AddValue("h");
-            _fakeInput.AddValue("h");
-
-            _testObj.HandlePlayerDraw(_yourHand);
-
-            Assert.That(_yourHand.GetHandScore(), Is.EqualTo(30));
-        }
-
-        [Test]
         public void PlayBigHandLoose()
         {
             var wager = new Wager(_fakeWriter, _fakeInput);
@@ -91,6 +78,19 @@ namespace BlackjackTests
             _testObj.PlayHand(wager, bank);
 
             Assert.True(bank.HasEnoughMoney());
+        }
+
+        [Test]
+        public void PlayerBustBreaksLoop()
+        {
+            _randomer.AddValue(10);
+            _fakeInput.AddValue("h");
+            _fakeInput.AddValue("h");
+            _fakeInput.AddValue("h");
+
+            _testObj.HandlePlayerDraw(_yourHand);
+
+            Assert.That(_yourHand.GetHandScore(), Is.EqualTo(30));
         }
     }
 }
