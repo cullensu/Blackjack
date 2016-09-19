@@ -1,10 +1,12 @@
+using System;
+
 namespace Blackjack
 {
     public class Bank
     {
-        private int _money;
         private readonly int _goalMoney;
         private readonly Writer _writer;
+        private int _money;
 
         public Bank(int startingMoney, int goalMoney, Writer writer)
         {
@@ -21,7 +23,16 @@ namespace Blackjack
         public void Settle(int diffMoney)
         {
             _money += diffMoney;
-            _writer.WriteLine($"You now have ${_money} (${diffMoney})");
+            var preceder = "$";
+            if (diffMoney > 0)
+                preceder = "+$";
+            else if (diffMoney < 0)
+            {
+                preceder = "-$";
+                diffMoney = Math.Abs(diffMoney);
+            }
+
+            _writer.WriteLine($"You now have ${_money} ({preceder}{diffMoney})");
         }
 
         public bool HasEnoughMoney()
