@@ -43,11 +43,11 @@ namespace Blackjack
 
         public void Game(Randomer random, Writer writer, Input input)
         {
-            var money = 500;
-            writer.WriteLine("Welcome to blackjack. You have $500. You win at $1000.");
+            var bank = new Bank(500, 1000, writer);
+            bank.Introduce();
             var game = new Game();
             var wager = new Wager(writer, input);
-            while (money > 0)
+            while (bank.HasMoney())
             {
                 wager.GetWager();
 
@@ -57,9 +57,12 @@ namespace Blackjack
                 game.HandlePlayerDraw(writer, input, yourHand);
                 HandleDealerDraw(writer, dealerHand);
 
-                money = DecideAndOutputWinner(writer, yourHand, dealerHand, money, wager);
+                var diffMoney = DecideAndOutputWinner(writer, yourHand, dealerHand, wager);
+                bank.Settle(diffMoney);
 
-                if (money >= 1000)
+                writer.WriteLine();
+
+                if (bank.HasEnoughMoney())
                 {
                     writer.WriteLine("You win!");
                     input.NextKey();
@@ -98,32 +101,32 @@ namespace Blackjack
             }
         }
 
-        private static int DecideAndOutputWinner(Writer writer, Hand yourHand, Hand dealerHand, int money, Wager wager)
+        private static int DecideAndOutputWinner(Writer writer, Hand yourHand, Hand dealerHand, Wager wager)
         {
+            var diffMoney = 0;
             var yourScore = yourHand.GetHandScore();
             var dealScore = dealerHand.GetHandScore();
             if ((yourScore < dealScore) || yourHand.Busted())
             {
                 var loseAmount = wager.LoseAmount();
-                money -= loseAmount;
+                diffMoney -= loseAmount;
                 var loseMessage = yourHand.Busted() ? "You busted!" : "You lost!";
                 writer.WriteLine(
-                    $"You had {yourScore} and dealer had {dealScore}. {loseMessage} You now have ${money} (-${loseAmount})");
+                    $"You had {yourScore} and dealer had {dealScore}. {loseMessage}.");
             }
             else if (yourScore == dealScore)
             {
                 writer.WriteLine(
-                    $"You had {yourScore} and dealer had {dealScore}. It's a push! You now have ${money} (+$0))");
+                    $"You had {yourScore} and dealer had {dealScore}. It's a push!");
             }
             else
             {
                 var winAmount = wager.WinAmount();
-                money += winAmount;
+                diffMoney += winAmount;
                 writer.WriteLine(
-                    $"You had {yourScore} and dealer had {dealScore}. You won! You now have ${money} (+${winAmount}).");
+                    $"You had {yourScore} and dealer had {dealScore}. You won!");
             }
-            writer.WriteLine();
-            return money;
+            return diffMoney;
         }
 
         private static Hand GetNewHand(Randomer random)
@@ -131,6 +134,41 @@ namespace Blackjack
             var hand = new Hand(random);
             hand.Deal();
             return hand;
+        }
+    }
+
+    public class Bank
+    {
+        private int _money;
+        private readonly int _goalMoney;
+        private readonly Writer _writer;
+
+        public Bank(int startingMoney, int goalMoney, Writer writer)
+        {
+            _money = startingMoney;
+            _goalMoney = goalMoney;
+            _writer = writer;
+        }
+
+        public bool HasMoney()
+        {
+            return _money > 0;
+        }
+
+        public void Settle(int diffMoney)
+        {
+            _money += diffMoney;
+            _writer.WriteLine($"You now have ${_money} (${diffMoney})");
+        }
+
+        public bool HasEnoughMoney()
+        {
+            return _money >= 1000;
+        }
+
+        public void Introduce()
+        {
+            _writer.WriteLine($"Welcome to blackjack. You have ${_money}. You win at ${_goalMoney}.");
         }
     }
 }
