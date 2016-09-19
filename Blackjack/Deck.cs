@@ -1,4 +1,6 @@
-﻿namespace Blackjack
+﻿using System;
+
+namespace Blackjack
 {
     public class Deck
     {
@@ -32,6 +34,17 @@
             _writer.WriteLine(
                 $"The dealer is showing {dealerHand.GetCardName(0)}.");
             return dealerHand;
+        }
+
+        public void HandleDealerDraw(Hand dealerHand)
+        {
+            _writer.WriteLine(Environment.NewLine +
+                                  $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
+            if (dealerHand.GetHandScore() < 17)
+            {
+                var newCard = dealerHand.Draw();
+                _writer.WriteLine($"The dealer adds another card to their hand. It's {Card.GetNameOf(newCard)}.");
+            }
         }
     }
 }

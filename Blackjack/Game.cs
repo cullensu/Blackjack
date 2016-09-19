@@ -46,21 +46,10 @@ namespace Blackjack
             var dealerHand = deck.DealDealerHand();
 
             HandlePlayerDraw(yourHand);
-            HandleDealerDraw(dealerHand);
+            deck.HandleDealerDraw(dealerHand);
 
             var diffMoney = DecideWinner(yourHand, dealerHand, wager);
             bank.Settle(diffMoney);
-        }
-
-        private void HandleDealerDraw(Hand dealerHand)
-        {
-            _writer.WriteLine(Environment.NewLine +
-                              $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
-            if (dealerHand.GetHandScore() < 17)
-            {
-                var newCard = dealerHand.Draw();
-                _writer.WriteLine($"The dealer adds another card to their hand. It's {Card.GetNameOf(newCard)}.");
-            }
         }
 
         private int DecideWinner(Hand yourHand, Hand dealerHand, Wager wager)
