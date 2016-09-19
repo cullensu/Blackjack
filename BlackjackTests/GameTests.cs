@@ -13,12 +13,14 @@ namespace BlackjackTests
             _randomer = new FakeRandomer();
             _yourHand = new Hand(_randomer);
             _fakeInput = new FakeInput();
+            _testObj = new Game(_fakeWriter, _fakeInput, _randomer);
         }
 
         private FakeRandomer _randomer;
         private Hand _yourHand;
         private FakeInput _fakeInput;
         private FakeWriter _fakeWriter;
+        private Game _testObj;
 
         [Test]
         public void HittingMakesHandBigger()
@@ -27,7 +29,7 @@ namespace BlackjackTests
 
             _fakeInput.AddValue("h");
             _fakeInput.AddValue("s");
-            new Game().HandlePlayerDraw(_fakeWriter, _fakeInput, _yourHand);
+            _testObj.HandlePlayerDraw(_yourHand);
 
             Assert.That(_yourHand.GetHandScore(), Is.EqualTo(2));
         }
@@ -39,7 +41,7 @@ namespace BlackjackTests
             _fakeInput.AddValue("h");
             _fakeInput.AddValue("h");
             _fakeInput.AddValue("s");
-            new Game().HandlePlayerDraw(_fakeWriter, _fakeInput, _yourHand);
+            _testObj.HandlePlayerDraw(_yourHand);
 
             Assert.That(_yourHand.GetHandScore(), Is.EqualTo(4));
         }
@@ -52,9 +54,10 @@ namespace BlackjackTests
             _fakeInput.AddValue("h");
             _fakeInput.AddValue("h");
 
-            new Game().HandlePlayerDraw(_fakeWriter, _fakeInput, _yourHand);
+            _testObj.HandlePlayerDraw(_yourHand);
 
             Assert.That(_yourHand.GetHandScore(), Is.EqualTo(30));
         }
+        
     }
 }
