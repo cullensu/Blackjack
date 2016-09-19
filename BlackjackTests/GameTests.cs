@@ -58,6 +58,39 @@ namespace BlackjackTests
 
             Assert.That(_yourHand.GetHandScore(), Is.EqualTo(30));
         }
-        
+
+        [Test]
+        public void PlayBigHandLoose()
+        {
+            var wager = new Wager(_fakeWriter, _fakeInput);
+            var bank = new Bank(100, 200, _fakeWriter);
+            _fakeInput.AddValue("100");
+            _fakeInput.AddValue("s");
+            _randomer.AddValue(7);
+            _randomer.AddValue(10);
+            _randomer.AddValue(10);
+            _randomer.AddValue(8);
+
+            _testObj.PlayHand(wager, bank);
+
+            Assert.False(bank.HasEnoughMoney());
+        }
+
+        [Test]
+        public void PlayBigHandWin()
+        {
+            var wager = new Wager(_fakeWriter, _fakeInput);
+            var bank = new Bank(100, 200, _fakeWriter);
+            _fakeInput.AddValue("100");
+            _fakeInput.AddValue("s");
+            _randomer.AddValue(10);
+            _randomer.AddValue(10);
+            _randomer.AddValue(10);
+            _randomer.AddValue(8);
+
+            _testObj.PlayHand(wager, bank);
+
+            Assert.True(bank.HasEnoughMoney());
+        }
     }
 }
