@@ -4,28 +4,28 @@ using NUnit.Framework;
 namespace BlackjackTests
 {
     [TestFixture]
-    public class BankTests
+    public class WalletTests
     {
-        private Bank _testObj;
-        private FakeWriter _fakeWriter;
-
         [SetUp]
         public void Setup()
         {
             _fakeWriter = new FakeWriter();
-            _testObj = new Bank(100, 200, _fakeWriter);
+            _testObj = new Wallet(100, 200, _fakeWriter);
+        }
+
+        private Wallet _testObj;
+        private FakeWriter _fakeWriter;
+
+        [Test]
+        public void HasEnoughMoneyStarting()
+        {
+            Assert.False(_testObj.HasEnoughMoney());
         }
 
         [Test]
         public void HasMoneyStarting()
         {
             Assert.True(_testObj.HasMoney());
-        }
-
-        [Test]
-        public void HasEnoughMoneyStarting()
-        {
-            Assert.False(_testObj.HasEnoughMoney());
         }
 
         [Test]

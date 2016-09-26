@@ -39,7 +39,7 @@ namespace Blackjack
         public void HandleDealerDraw(Hand dealerHand)
         {
             _writer.WriteLine(Environment.NewLine +
-                                  $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
+                              $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
             if (dealerHand.GetHandScore() < 17)
             {
                 var newCard = dealerHand.Draw();

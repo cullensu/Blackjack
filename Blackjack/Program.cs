@@ -45,17 +45,17 @@ namespace Blackjack
 
         public void Game(Randomer random, Writer writer, Input input)
         {
-            var bank = new Bank(500, 1000, writer);
-            bank.Introduce();
+            var wallet = new Wallet(500, 1000, writer);
+            wallet.Introduce();
             var game = new Game(writer, input, random);
             var wager = new Wager(writer);
-            while (bank.HasMoney())
+            while (wallet.HasMoney())
             {
-                game.PlayHand(wager, bank);
+                game.PlayHand(wager, wallet);
 
                 writer.WriteLine();
 
-                if (bank.HasEnoughMoney())
+                if (wallet.HasEnoughMoney())
                 {
                     writer.WriteLine("You win!");
                     return;

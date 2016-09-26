@@ -2,15 +2,15 @@
 {
     public class Game
     {
+        private readonly Deck _deck;
         private readonly Input _input;
-        private readonly Randomer _random;
         private readonly Writer _writer;
 
         public Game(Writer writer, Input input, Randomer random)
         {
             _writer = writer;
             _input = input;
-            _random = random;
+            _deck = new Deck(random, _writer);
         }
 
         public void HandlePlayerDraw(Hand yourHand)
@@ -36,20 +36,19 @@
             } while ((inputString != "s") && !yourHand.Busted());
         }
 
-        public void PlayHand(Wager wager, Bank bank)
+        public void PlayHand(Wager wager, Wallet wallet)
         {
             wager.Prompt();
             wager.ReadWager(_input.NextInput());
 
-            var deck = new Deck(_random, _writer);
-            var yourHand = deck.DealPlayerHand();
-            var dealerHand = deck.DealDealerHand();
+            var yourHand = _deck.DealPlayerHand();
+            var dealerHand = _deck.DealDealerHand();
 
             HandlePlayerDraw(yourHand);
-            deck.HandleDealerDraw(dealerHand);
+            _deck.HandleDealerDraw(dealerHand);
 
             var diffMoney = DecideWinner(yourHand, dealerHand, wager);
-            bank.Settle(diffMoney);
+            wallet.Settle(diffMoney);
         }
 
         private int DecideWinner(Hand yourHand, Hand dealerHand, Wager wager)

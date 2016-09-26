@@ -2,13 +2,13 @@ using System;
 
 namespace Blackjack
 {
-    public class Bank
+    public class Wallet
     {
         private readonly int _goalMoney;
         private readonly Writer _writer;
         private int _money;
 
-        public Bank(int startingMoney, int goalMoney, Writer writer)
+        public Wallet(int startingMoney, int goalMoney, Writer writer)
         {
             _money = startingMoney;
             _goalMoney = goalMoney;
