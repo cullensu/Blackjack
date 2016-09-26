@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace BlackjackTests
 {
     [TestFixture]
-    public class CardTests
+    public class CardsTests
     {
         [Test]
         public void GetNamesFancyCards()

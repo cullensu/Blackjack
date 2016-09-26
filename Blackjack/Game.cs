@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Blackjack
+﻿namespace Blackjack
 {
     public class Game
     {
@@ -40,7 +38,9 @@ namespace Blackjack
 
         public void PlayHand(Wager wager, Bank bank)
         {
-            wager.GetWager();
+            wager.Prompt();
+            wager.ReadWager(_input.NextInput());
+
             var deck = new Deck(_random, _writer);
             var yourHand = deck.DealPlayerHand();
             var dealerHand = deck.DealDealerHand();

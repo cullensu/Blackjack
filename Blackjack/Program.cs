@@ -38,7 +38,9 @@ namespace Blackjack
         public static void Main(string[] args)
         {
             var program = new Program();
-            program.Game(new Randomer(), new Writer(), new Input());
+            var input = new Input();
+            program.Game(new Randomer(), new Writer(), input);
+            input.NextKey();
         }
 
         public void Game(Randomer random, Writer writer, Input input)
@@ -46,7 +48,7 @@ namespace Blackjack
             var bank = new Bank(500, 1000, writer);
             bank.Introduce();
             var game = new Game(writer, input, random);
-            var wager = new Wager(writer, input);
+            var wager = new Wager(writer);
             while (bank.HasMoney())
             {
                 game.PlayHand(wager, bank);
@@ -56,13 +58,11 @@ namespace Blackjack
                 if (bank.HasEnoughMoney())
                 {
                     writer.WriteLine("You win!");
-                    input.NextKey();
                     return;
                 }
             }
 
             writer.WriteLine("You lose.");
-            input.NextKey();
         }
     }
 }

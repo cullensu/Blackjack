@@ -49,7 +49,7 @@ namespace BlackjackTests
         [Test]
         public void PlayBigHandLoose()
         {
-            var wager = new Wager(_fakeWriter, _fakeInput);
+            var wager = new Wager(_fakeWriter);
             var bank = new Bank(100, 200, _fakeWriter);
             _fakeInput.AddValue("100");
             _fakeInput.AddValue("s");
@@ -66,7 +66,7 @@ namespace BlackjackTests
         [Test]
         public void PlayBigHandWin()
         {
-            var wager = new Wager(_fakeWriter, _fakeInput);
+            var wager = new Wager(_fakeWriter);
             var bank = new Bank(100, 200, _fakeWriter);
             _fakeInput.AddValue("100");
             _fakeInput.AddValue("s");

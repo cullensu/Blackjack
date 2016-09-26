@@ -10,19 +10,16 @@ namespace BlackjackTests
         public void Setup()
         {
             _fakeWriter = new FakeWriter();
-            _fakeInput = new FakeInput();
-            _testObj = new Wager(_fakeWriter, _fakeInput);
+            _testObj = new Wager(_fakeWriter);
         }
 
         private FakeWriter _fakeWriter;
         private Wager _testObj;
-        private FakeInput _fakeInput;
 
         [Test]
         public void GettingWagerFromUser()
         {
-            _fakeInput.AddValue("10");
-            _testObj.GetWager();
+            _testObj.ReadWager("10");
             Assert.That(_testObj.LoseAmount(), Is.EqualTo(10));
             Assert.That(_testObj.WinAmount(), Is.EqualTo(15));
         }
@@ -30,8 +27,7 @@ namespace BlackjackTests
         [Test]
         public void WagerDefaultsTo25()
         {
-            _fakeInput.AddValue("");
-            _testObj.GetWager();
+            _testObj.ReadWager("");
 
             Assert.That(_testObj.LoseAmount(), Is.EqualTo(25));
         }
@@ -39,12 +35,10 @@ namespace BlackjackTests
         [Test]
         public void WagerMinAndMaxAreRespected()
         {
-            _fakeInput.AddValue("4");
-            _testObj.GetWager();
+            _testObj.ReadWager("4");
 
             Assert.That(_testObj.LoseAmount(), Is.EqualTo(10));
-            _fakeInput.AddValue("16567801");
-            _testObj.GetWager();
+            _testObj.ReadWager("16567801");
 
             Assert.That(_testObj.LoseAmount(), Is.EqualTo(100));
         }
