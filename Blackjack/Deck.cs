@@ -23,8 +23,9 @@ namespace Blackjack
 
         private Hand GetNewHand()
         {
-            var hand = new Hand(_random);
-            hand.Deal();
+            var hand = new Hand();
+            hand.AddCard(DrawCard());
+            hand.AddCard(DrawCard());
             return hand;
         }
 
@@ -42,9 +43,14 @@ namespace Blackjack
                               $"The dealer flips their other card over. It's {dealerHand.GetCardName(1)}.");
             if (dealerHand.GetHandScore() < 17)
             {
-                var newCard = dealerHand.Draw();
+                var newCard = dealerHand.AddCard(DrawCard());
                 _writer.WriteLine($"The dealer adds another card to their hand. It's {Card.GetNameOf(newCard)}.");
             }
+        }
+
+        public int DrawCard()
+        {
+            return _random.Next(1, 14);
         }
     }
 }

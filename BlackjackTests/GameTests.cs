@@ -11,7 +11,7 @@ namespace BlackjackTests
         {
             _fakeWriter = new FakeWriter();
             _randomer = new FakeRandomer();
-            _yourHand = new Hand(_randomer);
+            _yourHand = new Hand();
             _fakeInput = new FakeInput();
             _testObj = new Game(_fakeWriter, _fakeInput, _randomer);
         }

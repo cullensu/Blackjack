@@ -29,7 +29,7 @@
 
                 if (inputString == "h")
                 {
-                    var newCard = yourHand.Draw();
+                    var newCard = yourHand.AddCard(_deck.DrawCard());
                     _writer.WriteLine(
                         $"The dealer slides another card to you. It's {Card.GetNameOf(newCard)}. Your total is: {yourHand.GetHandScore()}");
                 }

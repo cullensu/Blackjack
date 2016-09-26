@@ -5,25 +5,12 @@ namespace Blackjack
     public class Hand
     {
         private const int WinningThreshold = 21;
-        private readonly Randomer _randomer;
         public List<int> _cards = new List<int>();
 
-        public Hand(Randomer random)
+        public int AddCard(int card)
         {
-            _randomer = random;
-        }
-
-        public void Deal()
-        {
-            Draw();
-            Draw();
-        }
-
-        public int Draw()
-        {
-            var newCard = _randomer.Next(1, 14);
-            _cards.Add(newCard);
-            return newCard;
+            _cards.Add(card);
+            return card;
         }
 
         public int GetHandScore()
@@ -37,7 +24,7 @@ namespace Blackjack
                 total += GetCardValue(card);
             }
 
-            while (total > WinningThreshold && aces > 0)
+            while ((total > WinningThreshold) && (aces > 0))
             {
                 total -= Card.HighAceValue - Card.LowAceValue;
                 aces--;
